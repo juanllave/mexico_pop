@@ -8,12 +8,12 @@ library(patchwork)
 setwd('~/Documents/repos/R/mexico_pop')
 dir  <- getwd()
 
-# Create a value with the current year
-current_year <- as.numeric(format(Sys.Date(), "%Y"))
-
 # Load dataset with the population per municipality, age groups, and sex
 data <- read_excel(paste0(dir,'/datasets/1_Grupo_Quinq_00_RM.xlsx')) %>% 
   select(-c(7:24))
+
+# Create a value with the current year
+current_year <- as.numeric(format(Sys.Date(), "%Y"))
 
 # Create a vector to translate columns names into English
 columns <- c('key', 'key_state', 'state', 'mun', 'sex', 'year', 'total')
@@ -32,7 +32,7 @@ pop <- data %>%
          pop_2040 = total[year == 2040],
          change_1990_current = round((pop_current - pop_1990) / pop_1990,5),
          change_current_2040 = round((pop_2040 - pop_current) / pop_current,5),
-         change_1990_2040 = round((pop_2040 - pop_1990) / pop_1990 * 100,5),
+         change_1990_2040 = round((pop_2040 - pop_1990) / pop_1990,5),
          period = ifelse(year <= current_year, 'past', 'future'),
          trend = ifelse(year <= current_year, 'past', 
                         ifelse(change_current_2040 > 0, 'increase_future', 'decrease_future'))
@@ -67,7 +67,7 @@ line_plot_function <-
         filter(state == state_to_filter) %>% 
         filter(mun == mun_to_filter) %>% 
         ggplot(aes(x = year, y = total, color = trend)) +
-        geom_line(size = 1) +
+        geom_line(linewidth = 1) +
         scale_color_manual(values = c(
           'past' = color_past,
           'increase_future' = color_increase_future,
@@ -108,4 +108,4 @@ line_plot_function <-
     }
 
 # Test the function
-line_plot_function('Baja California', 'Mexicali')
+line_plot_function('Puebla', 'Zacatlán')
