@@ -1,7 +1,7 @@
 ---
 title: "Population Trend Plots in ggplot2"
 author: "Juan Lozano Vallejo"
-date: "2024/08/22"
+date: "2024/08/23"
 toc: true
 number-sections: true
 highlight-style: pygments
@@ -15,7 +15,7 @@ format:
 
 ## Introduction
 
-A couple of years ago I worked with [CONAPO's population projections](https://www.gob.mx/conapo/documentos/reconstruccion-y-proyecciones-de-la-poblacion-de-los-municipios-de-mexico-1990-2040) and found the process very slow and tedious. So I recently went back to the source and, probably because my search was better, or maybe they chaged they files, found out the information much more accessible this time around.
+A couple of years ago I worked with [CONAPO's population projections](https://www.gob.mx/conapo/documentos/reconstruccion-y-proyecciones-de-la-poblacion-de-los-municipios-de-mexico-1990-2040) and found the process very slow and tedious beause there wasn't or I couldn't find a good file to work with. Recently, U went back to the source and, probably because my search was better, or maybe they changed they files, but I found the information much more accessible this time around.
 
 As I have been playing with the idea of creating reports for the municipalities of Mexico, after having edited the function for [population pyramids](https://github.com/juanllave/mexico_pop/tree/main?tab=readme-ov-file), I decided that a good next step would be to create a line plot that visualizes the trends in the population per municipality from 1990 to 2040.
 
@@ -55,11 +55,11 @@ data <- read_excel(paste0(dir,'/datasets/1_Grupo_Quinq_00_RM.xlsx')) %>%
   select(-c(7:24))
 ```
 
-Once we have the data, we need to make a few adjustments, remove some columns and create new one to be able to produce the plots.But before doing that, we need to create the variable `curent year` to store the value of the present year, this will future proof the plots.
+Once we have the data, we need to make a few adjustments, remove some columns and create new ones to be able to produce the plots.But before doing so, we need to create the variable `curent year` to store the value of the present year, this will future-proof the plots.
 
-One more change we do before proceeding to the actual cleaning of the dataset, is translating the columns names from Spanish into English, for this, we create a vector with the new names for the columns and we change the names of the columns.
+One more change we do before proceeding with the actual cleaning of the dataset, is translating the columns names from Spanish into English. For this, we create a vector with the new names for the columns and we change the names of the columns.
 
-Now, we are ready to clean the data set. Since the data is separated by women and men, and we need the total, we group the data and the summarize to have one value per municipality and per year. Next, we create columns with the population total for 1990, the current year, and 2040. This are immediately used to compute the percent change between 1990 and the current year, between 2040 and the current year, and between 1990 and 2040. Lastly, we create the columns *period* and *trend*, these will be helpful to choose the colors for the plots.
+We are now ready to clean the dataset. Since the data is separated by women and men, and we need the total, we group the data and then summarize to have one value per municipality and per year. Next, we create columns with the population total for 1990, the current year, and 2040. These are immediately used to compute the percent change between 1990 and the current year, between 2040 and the current year, and between 1990 and 2040. Lastly, we create the columns *period* and *trend*, these will be helpful to choose the colors for the plots.
 
 ````{r}
 #| label: clean-up
@@ -96,7 +96,7 @@ pop <- data %>%
 
 ### Visualization
 
-After the data is ready, we assign values for the colors that will be used in the plots. Grey will be used for the period between 1990 and the current year, green for the future period if the population is project to increase, and red if the opposite is true.
+After the data is ready, we assign values for the colors that will be used in the plots. Grey will be used for the period between 1990 and the current year, green for the future period if the population is projected to increase, and red if the opposite is true.
 
 ````{r}
 #| label: colors
@@ -113,9 +113,9 @@ light_grey <-  '#f5f5f5' # Lighter grey for the label of the vertical line
 ````
 
 
-At this point we are ready to create the function to produce the plots. This function consists of three steps: Creating a value for the placement of the current year line, creating the plot itself, and combining the plot with its annotations.
+At this point we are ready to create the function to produce the plots. This function consists of three parts: Creating a value for the placement of the current year line, creating the plot itself, and combining the plot with its annotations.
 
-+ **Part 1** of the function creates `y_max`, a value to store the maximum value for the population of the municipality that will be plotted, once retrieved, we divide it by `1.02` to give it a little bit of room once it's used to place the current year label on the plot.
++ **Part 1** of the function creates `y_max`, a value to store the maximum value for the population of the municipality that will be plotted; once retrieved, we divide it by `1.02` to give it a little bit of room once it's used to place the current year label on the plot.
 + **Part 2** creates the actual plot. Perhaps the most important part of the plot is `scale_color_manual`, it is in this step where the color is assigned based on the behavior of the population of each municipality, i.e., will it grow or shrink in the future.
 + **Part 3** combines the plot with its annotations. I choose to use patchwork, as opposed to adding these elements from within `ggplot2` because I might want to explore combining multiple municipalities in one single plot in the future.
 
@@ -202,7 +202,7 @@ At last, now that all of the heavy-lifting is over, we test the function to see 
 line_plot_function('Jalisco', 'Guadalajara')
 ````
 
-As we can see, since the population of Guadalajara is decreasing, and it's projected to continue doing so, the line for the future portion of the plot of is red. When compared with Zapopan in the plot below, we can see a green line due to the expected growth in population in the future.
+As we can see, since the population of Guadalajara is decreasing, and it's projected to continue doing so, the line for the future portion of the plot is red. When compared with Zapopan in the plot below, we can see a green line due to the expected growth in population in the future.
 
 ````{r}
 #| label: test-02
@@ -214,6 +214,8 @@ line_plot_function('Jalisco', 'Zapopan')
 
 ## Next Steps
 
-The beauty of this functions is that it makes it incredibly easy to work in reports with speed. It's even possible to create a ´for loop` that could automate the creation of a plot for every single municipality in Mexico.
+The beauty of this functions is that it makes it incredibly easy to work in parametrized reports with speed and ease. It's even possible to create a `for loop` that could automate the creation of a plot for every single municipality in Mexico.
 
-One more idea I'd like to explore is the creation of plots that compare the behavior or multiple municipalities based on the size of their population in 1990 and see what happens to them across time; or the opposite, begin with sith similar population in the future and backtrack to see how big they were in the past.
+One more idea I'd like to explore is the creation of plots that compare the behavior or multiple municipalities based on the size of their population in 1990 and see what happens to them across time; or the opposite, begin with municipalities with similar population in the future and backtrack to see how big they were in the past.
+
+Time will tell what I do next with this script.
