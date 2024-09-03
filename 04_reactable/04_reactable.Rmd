@@ -115,7 +115,7 @@ div(class = "twitter-followers",
 ```
 
 ```{r font_styles, eval=FALSE, echo=FALSE}
-htmltools::tags$link(href = "https://fonts.googleapis.com/css?family=Karla:400,700|Fira+Mono&display=fallback", rel = "stylesheet")
+htmltools::tags$link(href = ('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:ital,wght@0,300..700;1,300..700&family=Spline+Sans:wght@300..700&display=swap'), rel = 'stylesheet')
 ```
 
 ```{css styles, eval=FALSE, echo=FALSE}
@@ -127,7 +127,7 @@ htmltools::tags$link(href = "https://fonts.googleapis.com/css?family=Karla:400,7
 .twitter-followers {
   margin: 0 auto;
   width: 800px;
-  font-family: Karla, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Spline Sans, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .followers-header {
@@ -173,7 +173,7 @@ htmltools::tags$link(href = "https://fonts.googleapis.com/css?family=Karla:400,7
 }
 
 .number {
-  font-family: "Fira Mono", Consolas, Monaco, monospace;
+  font-family: "Spline Sans Mono", Consolas, Monaco, monospace;
   font-size: 0.84375rem;
   white-space: pre;
 }
